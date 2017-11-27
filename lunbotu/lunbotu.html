@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<style>
+    *{
+        margin:0;
+        padding:0;
+        list-style: none;
+    }
+    html,body{
+        width: 100%;
+        height: 100%;
+    }
+    .box{
+        width: 800px;
+        height: 500px;
+        margin:0 auto;
+        /*background: red;*/
+        position: relative;
+    }
+    .item{
+        width:100%;
+        height: 100%;
+        /*background: yellow;*/
+        position: absolute;
+        top:0;
+        left:0;
+    }
+    .item >li{
+        width:100%;
+        height: 100%;
+        background: green;
+        position: absolute;
+        top:0;
+        left:0;
+        transition: all 1s;
+        display: none;
+    }
+    .item>li.active{
+        display: block;
+    }
+    .item>li.left{
+        display: block;
+        transform: translateX(-100%);
+    }
+    .item>li.right{
+        display: block;
+        transform: translateX(100%);
+    }
+    .btnl,.btnr{
+        width: 35px;
+        height: 80px;
+        background: #ff6700;
+        font-size: 30px;
+        text-align: center;
+        line-height: 80px;
+        color: #000;
+        position: absolute;
+        top:calc(50% - 40px);
+        cursor: pointer;
+    }
+    .btnl{
+        left:0;
+    }
+    .btnr{
+        right:0;
+    }
+</style>
+<body>
+<div class="box">
+    <ul class="item">
+        <li class="active">111</li>
+        <li style="background: pink">222</li>
+        <li style="background: yellow">333</li>
+        <li style="background: orange">444</li>
+    </ul>
+    <div class="btnl">&lt</div>
+    <div class="btnr">&gt</div>
+</div>
+<script src="../jquery-3.2.1.js"></script>
+<script>
+    $(function(){
+        let btnl=$('.btnl');
+        let btnr=$('.btnr');
+       /* let t=setInterval(function(){
+            btnr.triggerHandler('click');
+        },1000)*/
+        btnr.on('click',function(){
+            let next=$('.active').next();
+            if(next.length){
+                move(next,'left');
+            }else{
+                next=$('li').eq(0);
+                move(next,'left');
+            }
+        })
+        btnl.on('click',function(){
+            let next=$('.active').next();
+            if(next.length){
+                move(next,'right');
+            }else{
+                next=$('li').eq(0);
+                move(next,'right');
+            }
+        })
+        function move(obj,dir){
+            let active=$('.active');
+            console.log(active)
+            active.addClass(dir).delay(1000).queue(function(){
+                $(this).removeClass('active').removeClass(dir);
+                $(this).dequeue();
+            })
+            let g= dir == 'left'?  'right':'left';
+
+            obj.addClass(g);
+            obj[0].offsetWidth;
+            obj.removeClass(g).addClass('active');
+        }
+    })
+</script>
+</body>
+</html>
